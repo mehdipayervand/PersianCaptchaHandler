@@ -68,6 +68,10 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{B9270493-C27A-4489-9C8A-84370FE4684D}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PersianCaptcha\PersianCaptchaHandler.csproj">
       <Project>{8D82F026-46A2-491E-8373-A318441ED1BA}</Project>
       <Name>PersianCaptchaHandler</Name>

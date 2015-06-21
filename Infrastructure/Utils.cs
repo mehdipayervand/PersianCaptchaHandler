@@ -9,6 +9,5 @@ namespace PersianCaptchaHandler
         {
             return NumberMatch.IsMatch(number2Match);
         }
-
     }
 }

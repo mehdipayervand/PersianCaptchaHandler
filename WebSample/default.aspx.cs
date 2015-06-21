@@ -18,6 +18,8 @@ namespace WebSample
             lblMessage.Text =
             txtCaptcha.Text = string.Empty;
 
+            var ipAddress = Request.UserHostAddress;
+
             var newNumber =
                 RandomGenerator.Next(100, 999)
                 ;
@@ -28,7 +30,7 @@ namespace WebSample
                 HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        farsiAlphabatic
+                        farsiAlphabatic, ipAddress
                     )
                 );
 
@@ -40,13 +42,15 @@ namespace WebSample
         }
         private string GetCaptcha()
         {
+            var ipAddress = Request.UserHostAddress;
+
             var farsiAlphabatic = NumberToString.ConvertIntNumberToFarsiAlphabatic(txtCaptcha.Text);
 
             var encryptedString =
                 HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        farsiAlphabatic
+                        farsiAlphabatic, ipAddress
                     )
                 );
 
@@ -55,7 +59,7 @@ namespace WebSample
 
         private bool ValidateUserInputForLogin()
         {
-            if (!Utils.IsNumber(txtCaptcha.Text))
+            if (string.IsNullOrEmpty(txtCaptcha.Text) || !Utils.IsNumber(txtCaptcha.Text))
             {
                 lblMessage.Text = "تصویر امنیتی را بطور صحیح وارد نکرده اید";
                 return false;

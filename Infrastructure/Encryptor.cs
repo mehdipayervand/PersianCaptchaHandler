@@ -8,15 +8,23 @@ namespace PersianCaptchaHandler
     public class Encryptor
     {
         #region constraints
-        private static string Password { get { return "Mehdi"; } }
-        private static byte[] Salt { get { return System.Text.Encoding.UTF8.GetBytes("Payervand"); } }
+        private static string Password
+        {
+            get
+            {
+                return System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh") + "-" + System.DateTime.UtcNow.Minute / 15;
+            }
+        }
+        //private static byte[] Salt { get { return System.Text.Encoding.UTF8.GetBytes("Payervand"); } }
         #endregion
 
-        public static string Encrypt(string clearText)
+        public static string Encrypt(string clearText, string salt = "Payervand")
         {
+            var innerSalt = System.Text.Encoding.UTF8.GetBytes(salt);
+
             // Turn text to bytes
             var clearBytes = Encoding.Unicode.GetBytes(clearText);
-            var pdb = new PasswordDeriveBytes(Password, Salt);
+            var pdb = new PasswordDeriveBytes(Password, innerSalt);
 
             var ms = new MemoryStream();
             var alg = Rijndael.Create();
@@ -33,12 +41,14 @@ namespace PersianCaptchaHandler
 
             return Convert.ToBase64String(encryptedData);
         }
-        public static string Decrypt(string cipherText)
+        public static string Decrypt(string cipherText, string salt)
         {
+            var innerSalt = System.Text.Encoding.UTF8.GetBytes(salt);
+
             // Convert text to byte
             var cipherBytes = Convert.FromBase64String(cipherText);
 
-            var pdb = new PasswordDeriveBytes(Password, Salt);
+            var pdb = new PasswordDeriveBytes(Password, innerSalt);
 
             var ms = new MemoryStream();
             var alg = Rijndael.Create();

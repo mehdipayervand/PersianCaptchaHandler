@@ -15,18 +15,20 @@ namespace PersianCaptchaHandler
         {
             if (context.Request.Params["text"] == null) return;
 
-            const int heightTotalImage = 25;
-            const int widthTotalImage = 155;
+            var ipAddress = context.Request.UserHostAddress;
+
+            var fontSize = 8;
+            const int heightTotalImage = 50;
+            const int widthTotalImage = 150;
 
             var queryStringValue = context.Request.Params["text"];
 
-            var sImageText =
-                Encryptor.Decrypt(queryStringValue);
+            var sImageText = Encryptor.Decrypt(queryStringValue, ipAddress);
 
             var objBmpImage = new Bitmap(1, 1, PixelFormat.Format32bppArgb);
 
             // Create the Font object for the image text drawing.
-            var objFont = new Font("Tahoma", 9, FontStyle.Regular, GraphicsUnit.Point);
+            var objFont = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Point);
 
             // Create a graphics object to measure the text's width and height.
             var objGraphics = Graphics.FromImage(objBmpImage);
@@ -46,10 +48,10 @@ namespace PersianCaptchaHandler
             objGraphics = Graphics.FromImage(objBmpImage);
 
             // Set Background color
-            objGraphics.Clear(Color.White);
+            objGraphics.Clear(Color.FromArgb(252, 252, 250));
             objGraphics.SmoothingMode = SmoothingMode.HighQuality;
             objGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-            objGraphics.DrawString(sImageText, objFont, new SolidBrush(Color.Black), floatX, floatY);
+            objGraphics.DrawString(sImageText, objFont, new SolidBrush(Color.FromArgb(95, 67, 189)), floatX, floatY);
 
             // Adds a simple wave
             double distort = RandomGenerator.Next(2, 5) * (RandomGenerator.Next(5) == 1 ? 1 : -1);
