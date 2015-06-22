@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.UI;
+using NumberToWordsLib;
 using PersianCaptchaHandler;
 
 namespace WebSample
@@ -18,20 +19,17 @@ namespace WebSample
             lblMessage.Text =
             txtCaptcha.Text = string.Empty;
 
-            var ipAddress = Request.UserHostAddress;
-
             var newNumber =
                 RandomGenerator.Next(100, 999)
                 ;
 
-            var farsiAlphabatic = NumberToString.ConvertIntNumberToFarsiAlphabatic(newNumber.ToString());
+            var farsiAlphabatic =newNumber.NumberToText(Language.Persian);
 
             hfCaptchaText.Value =
                 HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        farsiAlphabatic, ipAddress
-                    )
+                        farsiAlphabatic)
                 );
 
             txtCaptcha.Text = string.Empty;
@@ -42,16 +40,13 @@ namespace WebSample
         }
         private string GetCaptcha()
         {
-            var ipAddress = Request.UserHostAddress;
-
-            var farsiAlphabatic = NumberToString.ConvertIntNumberToFarsiAlphabatic(txtCaptcha.Text);
+            var farsiAlphabatic = (int.Parse(txtCaptcha.Text)).NumberToText(Language.Persian);
 
             var encryptedString =
                 HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        farsiAlphabatic, ipAddress
-                    )
+                        farsiAlphabatic)
                 );
 
             return encryptedString;

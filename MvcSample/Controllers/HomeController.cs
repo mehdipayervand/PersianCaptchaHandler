@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MvcSample.Models;
+using NumberToWordsLib;
 using PersianCaptchaHandler;
 
 namespace MvcSample.Controllers
@@ -16,14 +17,13 @@ namespace MvcSample.Controllers
         public ActionResult Index()
         {
            
-            var ipAddress = Request.UserHostAddress;
             var newNumber = RandomGenerator.Next(199, 999);
 
-            var farsiAlphabatic = NumberToString.ConvertIntNumberToFarsiAlphabatic(newNumber.ToString());
+            var farsiAlphabatic = newNumber.NumberToText(Language.Persian);
             var encrypted =  HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        farsiAlphabatic, ipAddress
+                        farsiAlphabatic
                     )
                 );
             ;
@@ -41,14 +41,11 @@ namespace MvcSample.Controllers
         [HttpPost]
         public ActionResult Index(UserLogin userLogin)
         {
-            var ipAddress = Request.UserHostAddress;
-
             var decryptedString =
                 HttpUtility
                 .UrlEncode(
                     Encryptor.Encrypt(
-                        NumberToString.ConvertIntNumberToFarsiAlphabatic(userLogin.InputCaptcha), ipAddress
-                    )
+                        (int.Parse(userLogin.InputCaptcha).NumberToText(Language.Persian)))
                 );
 
             var strDecodedVAlue = userLogin.Encrypted;
@@ -57,11 +54,11 @@ namespace MvcSample.Controllers
             {
                 var newNumber = RandomGenerator.Next(199, 999);
 
-                var farsiAlphabatic = NumberToString.ConvertIntNumberToFarsiAlphabatic(newNumber.ToString());
+                var farsiAlphabatic = newNumber.NumberToText(Language.Persian);
                 var encrypted = HttpUtility
                     .UrlEncode(
                         Encryptor.Encrypt(
-                            farsiAlphabatic, ipAddress
+                            farsiAlphabatic
                         )
                     );
                 ;

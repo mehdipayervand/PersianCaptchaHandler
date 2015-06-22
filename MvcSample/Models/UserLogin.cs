@@ -13,7 +13,6 @@ namespace MvcSample.Models
 
         public string Captcha { get; set; }
         public string InputCaptcha { get; set; }
-
         public string Encrypted { get; set; }
     }
 }

@@ -15,15 +15,13 @@ namespace PersianCaptchaHandler
         {
             if (context.Request.Params["text"] == null) return;
 
-            var ipAddress = context.Request.UserHostAddress;
-
             var fontSize = 8;
             const int heightTotalImage = 50;
             const int widthTotalImage = 150;
 
             var queryStringValue = context.Request.Params["text"];
 
-            var sImageText = Encryptor.Decrypt(queryStringValue, ipAddress);
+            var sImageText = Encryptor.Decrypt(queryStringValue);
 
             var objBmpImage = new Bitmap(1, 1, PixelFormat.Format32bppArgb);
 

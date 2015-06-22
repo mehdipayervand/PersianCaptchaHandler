@@ -12,19 +12,17 @@ namespace PersianCaptchaHandler
         {
             get
             {
-                return System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh") + "-" + System.DateTime.UtcNow.Minute / 15;
+                return "Mehdi";
             }
         }
-        //private static byte[] Salt { get { return System.Text.Encoding.UTF8.GetBytes("Payervand"); } }
+        private static byte[] Salt { get { return System.Text.Encoding.UTF8.GetBytes("Payervand"); } }
         #endregion
 
-        public static string Encrypt(string clearText, string salt = "Payervand")
+        public static string Encrypt(string clearText)
         {
-            var innerSalt = System.Text.Encoding.UTF8.GetBytes(salt);
-
             // Turn text to bytes
             var clearBytes = Encoding.Unicode.GetBytes(clearText);
-            var pdb = new PasswordDeriveBytes(Password, innerSalt);
+            var pdb = new PasswordDeriveBytes(Password, Salt);
 
             var ms = new MemoryStream();
             var alg = Rijndael.Create();
@@ -41,14 +39,13 @@ namespace PersianCaptchaHandler
 
             return Convert.ToBase64String(encryptedData);
         }
-        public static string Decrypt(string cipherText, string salt)
+        public static string Decrypt(string cipherText)
         {
-            var innerSalt = System.Text.Encoding.UTF8.GetBytes(salt);
 
             // Convert text to byte
             var cipherBytes = Convert.FromBase64String(cipherText);
 
-            var pdb = new PasswordDeriveBytes(Password, innerSalt);
+            var pdb = new PasswordDeriveBytes(Password, Salt);
 
             var ms = new MemoryStream();
             var alg = Rijndael.Create();
